@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passcode Protected Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #lock-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #content {
+            display: none;
+        }
+        #message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="lock-screen">
+        <h1>Enter Passcode to Access</h1>
+        <input type="password" id="passcode-input" placeholder="Enter passcode">
+        <button onclick="checkPasscode()">Unlock</button>
+        <p id="message"></p>
+    </div>
+
+    <div id="content">
+        <h1>Protected Content</h1>
+        <p>You have accessed the protected content.</p>
+    </div>
+
+    <script>
+        const correctPasscode = '1234'; // Set your desired passcode here
+
+        function checkPasscode() {
+            const inputPasscode = document.getElementById('passcode-input').value;
+            if (inputPasscode === correctPasscode) {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            } else {
+                document.getElementById('message').textContent = 'Incorrect passcode. Please try again.';
+            }
+        }
+
+        // Prompt for passcode when trying to leave the page
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
+        // Lock the content when the user returns to the page
+        window.addEventListener('focus', function () {
+            if (document.getElementById('content').style.display === 'block') {
+                document.getElementById('lock-screen').style.display = 'flex';
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('passcode-input').value = '';
+                document.getElementById('message').textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>
